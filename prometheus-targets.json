@@ -1,0 +1,16 @@
+[
+  {
+    "labels": {
+      "package": "prysm-lukso.dnp.dappnode.eth",
+      "service": "beacon-chain.prysm-lukso.dappnode"
+    },
+    "targets": ["beacon-chain.prysm-lukso.dappnode:8080"]
+  },
+  {
+    "labels": {
+      "package": "prysm-lukso.dnp.dappnode.eth",
+      "service": "validator.prysm-lukso.dappnode"
+    },
+    "targets": ["validator.prysm-lukso.dappnode:8081"]
+  }
+]
