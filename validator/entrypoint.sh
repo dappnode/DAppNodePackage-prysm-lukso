@@ -1,51 +1,22 @@
 #!/bin/bash
 
-export NETWORK="lukso"
 VALIDATOR_PORT=3500
-export WEB3SIGNER_API="http://web3signer.web3signer-${NETWORK}.dappnode:9000"
-export WALLET_DIR="/root/.eth2validators"
+WEB3SIGNER_API="http://web3signer.web3signer-${NETWORK}.dappnode:9000"
+WALLET_DIR="/root/.eth2validators"
 
 # Copy auth-token in runtime to the prysm token dir
 mkdir -p ${WALLET_DIR}
 cp /auth-token ${WALLET_DIR}/auth-token
 
-# Migrate if required
-if [[ $(validator accounts list \
+exec -c validator \
+  --datadir=/data \
   --wallet-dir="$WALLET_DIR" \
-  --wallet-password-file="${WALLET_DIR}/walletpassword.txt" \
-  --lukso \
-  --accept-terms-of-use) ]]; then
-  {
-    echo "found validators, starging migration"
-    eth2-migrate.sh &
-    wait $!
-  }
-else
-  { echo "validators not found, no migration needed"; }
-fi
-
-# Remove manual migration if older than 20 days
-find /root -type d -name manual_migration -mtime +20 -exec rm -rf {} +
-
-# MEVBOOST: https://hackmd.io/@prysmaticlabs/BJeinxFsq
-if [ -n "$_DAPPNODE_GLOBAL_MEVBOOST_lukso" ] && [ "$_DAPPNODE_GLOBAL_MEVBOOST_lukso" == "true" ]; then
-  echo "MEVBOOST is enabled"
-  MEVBOOST_URL="http://mev-boost.mev-boost-goerli.dappnode:18550"
-  if curl --retry 5 --retry-delay 5 --retry-all-errors "${MEVBOOST_URL}"; then
-    EXTRA_OPTS="--enable-builder ${EXTRA_OPTS}"
-  else
-    echo "MEVBOOST is enabled but ${MEVBOOST_URL} is not reachable"
-    curl -X POST -G 'http://my.dappnode/notification-send' --data-urlencode 'type=danger' --data-urlencode title="${MEVBOOST_URL} is not available" --data-urlencode 'body=Make sure the mevboost is available and running'
-  fi
-fi
-
-exec -c validator --lukso \
-  --datadir="$WALLET_DIR" \
-  --wallet-dir="$WALLET_DIR" \
+  --chain-config-file=/config/config.yaml \
   --monitoring-host 0.0.0.0 \
-  --beacon-rpc-provider="$BEACON_RPC_PROVIDER" \
-  --beacon-rpc-gateway-provider="$BEACON_RPC_GATEWAY_PROVIDER" \
+  --beacon-rpc-provider="beacon-chain.prysm-lukso.dappnode:4000" \
+  --beacon-rpc-gateway-provider="beacon-chain.prysm-lukso.dappnode:3500" \
   --validators-external-signer-url="$WEB3SIGNER_API" \
+  --rpc-host 0.0.0.0 \
   --grpc-gateway-host=0.0.0.0 \
   --grpc-gateway-port="$VALIDATOR_PORT" \
   --grpc-gateway-corsdomain=http://0.0.0.0:"$VALIDATOR_PORT" \
@@ -54,4 +25,5 @@ exec -c validator --lukso \
   --web \
   --accept-terms-of-use \
   --enable-doppelganger \
+  --verbosity $LOG_VERBOSITY \
   ${EXTRA_OPTS}

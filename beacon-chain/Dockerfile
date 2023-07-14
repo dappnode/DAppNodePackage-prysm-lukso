@@ -1,32 +1,18 @@
-FROM debian:bullseye-slim as binary
-
-ARG TARGETARCH
 ARG UPSTREAM_VERSION
-ENV DOWNLOAD_URL https://github.com/prysmaticlabs/prysm/releases/download
 
-RUN DEBIAN_FRONTEND=noninteractive \
-  apt update && apt install --assume-yes --no-install-recommends wget ca-certificates && \
-  echo ${DOWNLOAD_URL}/${UPSTREAM_VERSION}/beacon-chain-${UPSTREAM_VERSION}-linux-${TARGETARCH:-amd64} && \
-  wget -q ${DOWNLOAD_URL}/${UPSTREAM_VERSION}/beacon-chain-${UPSTREAM_VERSION}-linux-${TARGETARCH:-amd64} -O /usr/local/bin/beacon-chain && \
-  wget -q https://github.com/lukso-network/network-configs/blob/main/l16/configs/genesis.ssz?raw=true -O /tmp/genesis.ssz && \
-  wget -q https://raw.githubusercontent.com/lukso-network/network-configs/main/l16/configs/config.yaml -O /tmp/config.yaml && \
-  chmod +x  /usr/local/bin/beacon-chain
+FROM prysmaticlabs/prysm-beacon-chain:${UPSTREAM_VERSION}
 
-FROM debian:bullseye-slim
-
-#Copy binaries from build stage
-COPY --from=binary /usr/local/bin/beacon-chain /usr/local/bin/beacon-chain
-COPY --from=binary /tmp/genesis.ssz /genesis.ssz
-COPY --from=binary /tmp/config.yaml /config.yaml
 COPY jwtsecret.hex /jwtsecret
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
-RUN apt update && \
-  apt install -y curl ca-certificates file && \
-  rm -rf /var/lib/apt/lists/* && \
-  chmod +x /usr/local/bin/entrypoint.sh
+RUN apt update && apt install -y wget 
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
+RUN mkdir -p /config
 
+# Get Lukso config and genesis for Prysm
+RUN wget https://raw.githubusercontent.com/lukso-network/network-configs/main/mainnet/prysm/prysm.yaml -O /config/config.yaml
+RUN wget https://raw.githubusercontent.com/lukso-network/network-configs/main/mainnet/shared/genesis_42.json -O /config/genesis.ssz
 
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
