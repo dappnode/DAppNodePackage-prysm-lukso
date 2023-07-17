@@ -1,12 +1,8 @@
 ARG UPSTREAM_VERSION
 
-FROM prysmaticlabs/prysm-beacon-chain:${UPSTREAM_VERSION}
+FROM alpine:3.18.2 as builder
 
-COPY jwtsecret.hex /jwtsecret
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-
-RUN apt update && apt install -y wget 
-RUN chmod +x /usr/local/bin/entrypoint.sh
+RUN apk update && apk add --no-cache wget
 
 RUN mkdir -p /config
 
@@ -14,5 +10,11 @@ RUN mkdir -p /config
 RUN wget https://raw.githubusercontent.com/lukso-network/network-configs/main/mainnet/prysm/prysm.yaml -O /config/config.yaml
 RUN wget https://raw.githubusercontent.com/lukso-network/network-configs/main/mainnet/shared/genesis_42.json -O /config/genesis.ssz
 
-ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
+FROM prysmaticlabs/prysm-beacon-chain:${UPSTREAM_VERSION}
 
+COPY --from=builder /config /config
+
+COPY jwtsecret.hex /jwtsecret
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
