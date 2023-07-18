@@ -35,5 +35,11 @@
   },
   "warnings": {
     "onRemove": "Before deleting this package, make sure your web3signer is not using it to validate, or you will stop validating. You can check it at Packages > web3signer > Config > Client)"
-  }
+  },
+  "globalEnvs": [
+    {
+      "envs": ["EXECUTION_CLIENT_LUKSO"],
+      "services": ["beacon-chain"]
+    }
+  ]
 }
