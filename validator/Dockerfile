@@ -10,14 +10,20 @@ RUN DEBIAN_FRONTEND=noninteractive \
   wget -q ${DOWNLOAD_URL}/${UPSTREAM_VERSION}/validator-${UPSTREAM_VERSION}-linux-${TARGETARCH:-amd64} -O /usr/local/bin/validator && \
   chmod +x  /usr/local/bin/validator
 
-RUN mkdir -p /config
+ENV LUKSO_CONFIG_PATH /configs/mainnet
+ENV CHAIN_CONFIG_FILE_PATH ${LUKSO_CONFIG_PATH}/shared/config.yaml
+
+RUN mkdir -p ${LUKSO_CONFIG_PATH}/prysm && \
+    mkdir -p ${LUKSO_CONFIG_PATH}/shared
 
 # Get Lukso config and genesis for Prysm
-RUN wget https://raw.githubusercontent.com/lukso-network/network-configs/main/mainnet/prysm/validator.yaml -O /config/config.yaml
+RUN wget https://raw.githubusercontent.com/lukso-network/network-configs/main/mainnet/shared/config.yaml -O ${CHAIN_CONFIG_FILE_PATH}
 
 FROM debian:bullseye-slim
 
-COPY --from=builder /config /config
+ENV CHAIN_CONFIG_FILE_PATH /configs/mainnet/shared/config.yaml
+
+COPY --from=builder /configs /configs
 COPY --from=builder /usr/local/bin/validator /usr/local/bin/validator
 
 COPY auth-token /auth-token

@@ -3,7 +3,7 @@
 if [[ -n $CHECKPOINT_SYNC_URL ]]; then
   EXTRA_OPTS="--checkpoint-sync-url=${CHECKPOINT_SYNC_URL} --genesis-beacon-api-url=${CHECKPOINT_SYNC_URL} ${EXTRA_OPTS}"
 else
-  EXTRA_OPTS="--genesis-state=/config/genesis.ssz ${EXTRA_OPTS}"
+  EXTRA_OPTS="--genesis-state=${GENESIS_FILE_PATH} ${EXTRA_OPTS}"
 fi
 
 case $_DAPPNODE_GLOBAL_EXECUTION_CLIENT_LUKSO in
@@ -21,10 +21,9 @@ esac
 
 exec -c beacon-chain \
   --accept-terms-of-use \
-  --genesis-state=/config/genesis.ssz \
-  --chain-config-file=/config/config.yaml \
   --datadir=/data \
   --jwt-secret=/jwtsecret \
+  --chain-config-file="$CHAIN_CONFIG_FILE_PATH" \
   --execution-endpoint=$HTTP_ENGINE \
   --monitoring-host 0.0.0.0 \
   --grpc-gateway-host 0.0.0.0 \

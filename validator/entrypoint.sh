@@ -11,7 +11,7 @@ cp /auth-token ${WALLET_DIR}/auth-token
 exec -c validator \
   --datadir=/data \
   --wallet-dir="$WALLET_DIR" \
-  --chain-config-file=/config/config.yaml \
+  --chain-config-file="$CHAIN_CONFIG_FILE_PATH" \
   --monitoring-host 0.0.0.0 \
   --beacon-rpc-provider="beacon-chain.prysm-lukso.dappnode:4000" \
   --beacon-rpc-gateway-provider="beacon-chain.prysm-lukso.dappnode:3500" \
