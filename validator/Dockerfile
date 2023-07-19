@@ -1,43 +1,32 @@
-###############
-# Prune image #
-###############
-# golang alpine 1.17
-FROM golang:1.17-alpine as prune
-WORKDIR /usr/src/app
-RUN apk update && apk add git && git clone https://github.com/dappnode/prune-slashing-protection.git && \
-  go build -o slashing-prune ./prune-slashing-protection/slashing-prune.go
 
-##############
-# Base image #
-##############
-FROM debian:bullseye-slim as binary
+FROM debian:bullseye-slim as builder
 
 ARG TARGETARCH
 ARG UPSTREAM_VERSION
 ENV DOWNLOAD_URL https://github.com/prysmaticlabs/prysm/releases/download
 
 RUN DEBIAN_FRONTEND=noninteractive \
-  apt update && apt install --assume-yes --no-install-recommends wget ca-certificates && \
+  apt update && apt install -y wget && \
   wget -q ${DOWNLOAD_URL}/${UPSTREAM_VERSION}/validator-${UPSTREAM_VERSION}-linux-${TARGETARCH:-amd64} -O /usr/local/bin/validator && \
   chmod +x  /usr/local/bin/validator
 
-################
-# Runner image #
-################
+ENV LUKSO_CONFIG_PATH /configs/mainnet
+ENV CHAIN_CONFIG_FILE_PATH ${LUKSO_CONFIG_PATH}/shared/config.yaml
+
+RUN mkdir -p ${LUKSO_CONFIG_PATH}/prysm && \
+    mkdir -p ${LUKSO_CONFIG_PATH}/shared
+
+# Get Lukso config and genesis for Prysm
+RUN wget https://raw.githubusercontent.com/lukso-network/network-configs/main/mainnet/shared/config.yaml -O ${CHAIN_CONFIG_FILE_PATH}
+
 FROM debian:bullseye-slim
 
-# Copy slashing prune
-COPY --from=prune /usr/src/app/slashing-prune /usr/local/bin
+ENV CHAIN_CONFIG_FILE_PATH /configs/mainnet/shared/config.yaml
 
-#Copy binaries from build stage
-COPY --from=binary /usr/local/bin/validator /usr/local/bin
+COPY --from=builder /configs /configs
+COPY --from=builder /usr/local/bin/validator /usr/local/bin/validator
+
 COPY auth-token /auth-token
-COPY eth2-migrate.sh /usr/local/bin
-COPY entrypoint.sh /usr/local/bin
-
-RUN apt update && \
-  apt install -y ca-certificates file git curl jq unzip zip && \
-  rm -rf /var/lib/apt/lists/* && \
-  chmod +x /usr/local/bin/entrypoint.sh
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
