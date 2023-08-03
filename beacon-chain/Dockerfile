@@ -11,14 +11,12 @@ RUN DEBIAN_FRONTEND=noninteractive \
 
 ENV LUKSO_CONFIG_PATH /configs/mainnet
 ENV GENESIS_FILE_PATH ${LUKSO_CONFIG_PATH}/shared/genesis.ssz
-ENV PRYSM_CONFIG_FILE_PATH ${LUKSO_CONFIG_PATH}/prysm/prysm.yaml
 ENV CHAIN_CONFIG_FILE_PATH ${LUKSO_CONFIG_PATH}/shared/config.yaml
 
 RUN mkdir -p ${LUKSO_CONFIG_PATH}/prysm && \
-    mkdir -p ${LUKSO_CONFIG_PATH}/shared
+  mkdir -p ${LUKSO_CONFIG_PATH}/shared
 
 # Get Lukso config and genesis for Prysm
-RUN wget https://raw.githubusercontent.com/lukso-network/network-configs/main/mainnet/prysm/prysm.yaml -O ${PRYSM_CONFIG_FILE_PATH}
 RUN wget https://raw.githubusercontent.com/lukso-network/network-configs/main/mainnet/shared/genesis.ssz -O ${GENESIS_FILE_PATH}
 RUN wget https://raw.githubusercontent.com/lukso-network/network-configs/main/mainnet/shared/config.yaml -O ${CHAIN_CONFIG_FILE_PATH}
 
