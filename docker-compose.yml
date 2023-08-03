@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
     environment:
       P2P_PORT: 12603
-      CHECKPOINT_SYNC_URL: ""
+      CHECKPOINT_SYNC_URL: "https://checkpoints.mainnet.lukso.network"
       EXTRA_OPTS: ""
       LOG_VERBOSITY: info
   validator:
