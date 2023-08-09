@@ -28,7 +28,7 @@ exec -c beacon-chain \
   --monitoring-host 0.0.0.0 \
   --grpc-gateway-host 0.0.0.0 \
   --grpc-gateway-port=3500 \
-  --grpc-gateway-corsdomain="http://prysm.dappnode" \
+  --grpc-gateway-corsdomain="http://prysm-lukso.dappnode" \
   --rpc-host 0.0.0.0 \
   --verbosity $LOG_VERBOSITY \
   --p2p-tcp-port=$P2P_PORT \

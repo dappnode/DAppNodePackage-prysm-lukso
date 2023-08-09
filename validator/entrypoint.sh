@@ -1,6 +1,5 @@
 #!/bin/bash
 
-VALIDATOR_PORT=3500
 WALLET_DIR="/root/.eth2validators"
 
 # Copy auth-token in runtime to the prysm token dir
@@ -15,10 +14,10 @@ exec -c validator \
   --beacon-rpc-provider="beacon-chain.prysm-lukso.dappnode:4000" \
   --beacon-rpc-gateway-provider="beacon-chain.prysm-lukso.dappnode:3500" \
   --validators-external-signer-url="http://web3signer.web3signer-lukso.dappnode:9000" \
-  --rpc-host 0.0.0.0 \
   --grpc-gateway-host=0.0.0.0 \
-  --grpc-gateway-port="$VALIDATOR_PORT" \
-  --grpc-gateway-corsdomain=http://0.0.0.0:"$VALIDATOR_PORT" \
+  --web \
+  --grpc-gateway-port=3500 \
+  --grpc-gateway-corsdomain=http://0.0.0.0:3500 \
   --graffiti="$GRAFFITI" \
   --suggested-fee-recipient="${FEE_RECIPIENT_ADDRESS}" \
   --accept-terms-of-use \
