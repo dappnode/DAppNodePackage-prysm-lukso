@@ -4,8 +4,8 @@
   "upstreamVersion": "v4.0.7",
   "upstreamRepo": "prysmaticlabs/prysm",
   "upstreamArg": "UPSTREAM_VERSION",
-  "shortDescription": "Prysm implementation for lukso Beacon chain + validator",
-  "description": "Validate with Prysm in Lukso: a Go implementation of the Beacon Chain and open source project created by Prysmatic Labs. Beacon node which powers the beacon chain at the core of Ethereum 2.0\n\nIt includes a Grafana dashboard for the [DMS](http://my.dappnode/#/installer/dms.dnp.dappnode.eth) thanks to the amazing work of [metanull-operator](https://github.com/metanull-operator/eth2-grafana)",
+  "shortDescription": "Prysm implementation for LUKSO Beacon chain + validator",
+  "description": "Validate with Prysm in LUKSO: a Go implementation of the Beacon Chain and open source project created by Prysmatic Labs. Beacon node which powers the beacon chain at the core of Ethereum 2.0\n\nIt includes a Grafana dashboard for the [DMS](http://my.dappnode/#/installer/dms.dnp.dappnode.eth) thanks to the amazing work of [metanull-operator](https://github.com/metanull-operator/eth2-grafana)",
   "type": "service",
   "architectures": ["linux/amd64"],
   "chain": {
@@ -24,7 +24,7 @@
     "url": "https://github.com/dappnode/DAppNodePackage-prysm-lukso/issues"
   },
   "requirements": {
-    "minimumDappnodeVersion": "0.2.76"
+    "minimumDappnodeVersion": "0.2.77"
   },
   "categories": ["Blockchain"],
   "links": {
@@ -34,7 +34,7 @@
     "docs": "https://docs.prylabs.network/docs/getting-started"
   },
   "warnings": {
-    "onRemove": "Before deleting this package, make sure your web3signer is not using it to validate, or you will stop validating. You can check it at Packages > web3signer > Config > Client)"
+    "onRemove": "Before deleting this package, make sure your web3signer is not using it to validate, or you will stop validating. You can check it at the Stakers tab"
   },
   "globalEnvs": [
     {
