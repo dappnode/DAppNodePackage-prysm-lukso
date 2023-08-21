@@ -6,6 +6,10 @@ WALLET_DIR="/root/.eth2validators"
 mkdir -p ${WALLET_DIR}
 cp /auth-token ${WALLET_DIR}/auth-token
 
+if [[ $ENABLE_DOPPELGANGER == "true" ]]; then
+  EXTRA_OPTS="--enable-doppelganger ${EXTRA_OPTS}"
+fi
+
 exec -c validator \
   --datadir=/data \
   --wallet-dir="$WALLET_DIR" \
@@ -21,6 +25,5 @@ exec -c validator \
   --graffiti="$GRAFFITI" \
   --suggested-fee-recipient="${FEE_RECIPIENT_ADDRESS}" \
   --accept-terms-of-use \
-  --enable-doppelganger \
   --verbosity $LOG_VERBOSITY \
   ${EXTRA_OPTS}

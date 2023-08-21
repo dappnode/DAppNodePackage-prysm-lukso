@@ -33,9 +33,9 @@ exec -c beacon-chain \
   --verbosity $LOG_VERBOSITY \
   --p2p-tcp-port=$P2P_PORT \
   --p2p-udp-port=$P2P_PORT \
-  --p2p-max-peers=250 \
-  --min-sync-peers=0 \
-  --subscribe-all-subnets=true \
+  --p2p-max-peers="$MAX_PEERS" \
+  --min-sync-peers="$MIN_SYNC_PEERS" \
+  --subscribe-all-subnets="$SUBSCRIBE_ALL_SUBNETS" \
   --block-batch-limit=512 \
   --block-batch-limit-burst-factor=12 \
   --contract-deployment-block=0 \
