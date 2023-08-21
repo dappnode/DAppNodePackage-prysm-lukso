@@ -16,8 +16,8 @@ services:
       CHECKPOINT_SYNC_URL: "https://checkpoints.mainnet.lukso.network"
       EXTRA_OPTS: ""
       LOG_VERBOSITY: info
-      MIN_SYNC_PEERS: 0
-      MAX_PEERS: 250
+      MIN_SYNC_PEERS: "0"
+      MAX_PEERS: "250"
       SUBSCRIBE_ALL_SUBNETS: "true"
   validator:
     build:
