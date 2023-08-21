@@ -18,7 +18,7 @@ services:
       LOG_VERBOSITY: info
       MIN_SYNC_PEERS: 0
       MAX_PEERS: 250
-      SUBSCRIBE_ALL_SUBNETS: true
+      SUBSCRIBE_ALL_SUBNETS: "true"
   validator:
     build:
       context: validator
@@ -32,7 +32,7 @@ services:
       GRAFFITI: validating_from_DAppNode
       EXTRA_OPTS: ""
       FEE_RECIPIENT_ADDRESS: ""
-      ENABLE_DOPPELGANGER: true
+      ENABLE_DOPPELGANGER: "true"
 volumes:
   beacon-chain-data: {}
   validator-data: {}
