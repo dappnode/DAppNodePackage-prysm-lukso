@@ -14,7 +14,7 @@ ENV CHAIN_CONFIG_FILE_PATH /configs/mainnet/shared/config.yaml
 
 RUN mkdir -p "$(dirname ${CHAIN_CONFIG_FILE_PATH})"
 
-# Get Lukso config and genesis for Prysm
+# Get Lukso config for Prysm
 RUN wget https://raw.githubusercontent.com/lukso-network/network-configs/main/mainnet/shared/config.yaml -O ${CHAIN_CONFIG_FILE_PATH}
 
 FROM debian:bullseye-slim

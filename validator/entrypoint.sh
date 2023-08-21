@@ -23,7 +23,6 @@ exec -c validator \
   --grpc-gateway-port=3500 \
   --grpc-gateway-corsdomain=http://0.0.0.0:3500 \
   --graffiti="$GRAFFITI" \
-  --suggested-fee-recipient="${FEE_RECIPIENT_ADDRESS}" \
   --accept-terms-of-use \
   --verbosity $LOG_VERBOSITY \
   ${EXTRA_OPTS}
