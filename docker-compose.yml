@@ -30,7 +30,6 @@ services:
     environment:
       LOG_VERBOSITY: info
       GRAFFITI: validating_from_DAppNode
-      ENABLE_DOPPELGANGER: "true"
       EXTRA_OPTS: ""
 volumes:
   beacon-chain-data: {}
