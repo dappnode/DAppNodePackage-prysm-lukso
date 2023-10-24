@@ -1,7 +1,7 @@
 {
   "name": "prysm-lukso.dnp.dappnode.eth",
   "version": "0.1.1",
-  "upstreamVersion": "v4.0.8",
+  "upstreamVersion": "v4.1.1",
   "upstreamRepo": "prysmaticlabs/prysm",
   "upstreamArg": "UPSTREAM_VERSION",
   "shortDescription": "Prysm implementation for LUKSO Beacon chain + validator",
