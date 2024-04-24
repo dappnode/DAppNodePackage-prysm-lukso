@@ -4,16 +4,16 @@ services:
     build:
       context: beacon-chain
       args:
-        UPSTREAM_VERSION: v5.0.0
+        UPSTREAM_VERSION: v5.0.3
     volumes:
-      - "beacon-chain-data:/data"
+      - beacon-chain-data:/data
     ports:
-      - "12603:12603/tcp"
-      - "12603:12603/udp"
+      - 12603:12603/tcp
+      - 12603:12603/udp
     restart: unless-stopped
     environment:
       P2P_PORT: 12603
-      CHECKPOINT_SYNC_URL: "https://checkpoints.mainnet.lukso.network"
+      CHECKPOINT_SYNC_URL: https://checkpoints.mainnet.lukso.network
       EXTRA_OPTS: ""
       LOG_VERBOSITY: info
       MIN_SYNC_PEERS: "0"
@@ -23,9 +23,9 @@ services:
     build:
       context: validator
       args:
-        UPSTREAM_VERSION: v5.0.0
+        UPSTREAM_VERSION: v5.0.3
     volumes:
-      - "validator-data:/data"
+      - validator-data:/data
     restart: unless-stopped
     environment:
       LOG_VERBOSITY: info
