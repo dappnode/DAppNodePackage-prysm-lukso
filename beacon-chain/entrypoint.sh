@@ -1,5 +1,16 @@
 #!/bin/bash
 
+PRYSM_VERSION_FILE="/prysm-lukso-version"
+
+# Prysm LUKSO migration from upstream v4.0.7 to upstream v5.0.3 caused the DB to be
+# considered corrupted. This is a workaround to fix clear the DB and start sync from scratch.
+if [ ! -f "$PRYSM_VERSION_FILE" ]; then
+  echo "[INFO - entrypoint] Prysm version file not found, forcing clear DB"
+  EXTRA_OPTS="--force-clear-db ${EXTRA_OPTS}"
+fi
+
+beacon-chain --version >"$PRYSM_VERSION_FILE"
+
 if [[ -n $CHECKPOINT_SYNC_URL ]]; then
   EXTRA_OPTS="--checkpoint-sync-url=${CHECKPOINT_SYNC_URL} --genesis-beacon-api-url=${CHECKPOINT_SYNC_URL} ${EXTRA_OPTS}"
 else
